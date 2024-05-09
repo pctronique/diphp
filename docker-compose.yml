@@ -1,0 +1,14 @@
+
+services:
+    php:
+        container_name: testv_php
+        restart: always
+        build: 
+            context: ./image/
+            #args:
+            #    - PHP_FOLDER_PROJECT=/var/www
+            #    - VALUE_PHP_VERSION=8.3.7RC1-fpm
+            #    - VALUE_XDEBUG_VERSION=3.3.2
+            #    - VALUE_COMPOSER_VERSION=2.7.4
+            #    - VALUE_GOLANG_VERSION=1.11.8
+
