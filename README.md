@@ -6,33 +6,20 @@ Version 1.0.0
   <ol>
     <li><a href="#Présentation">Présentation</a></li>
     <li>
-        <a href="#Installation">Installation</a>
+        <a href="#Version">Version</a>
         <ul>
-            <li><a href="#Le-nom-du-projet">Le nom du projet</a></li>
-            <li><a href="#Le-fichier-env">Le fichier .env</a></li>
-            <li><a href="#Création-des-conteneurs">Création des conteneurs</a></li>
-            <li><a href="#Où-placer-le-code">Où placer le code</a></li>
+            <li><a href="#Modifier-les-versions">Modifier les versions</a></li>
+            <li><a href="#Dernière-version">Dernière version</a></li>
         </ul>
     </li>
     <li>
-        <a href="#Autres-informations">Autres informations</a>
+        <a href="#Dossier">Dossier</a>
         <ul>
-            <li><a href="#Versions">Versions</a></li>
-            <li><a href="#Installer-la-dernière-version">Installer la dernière version</a></li>
-            <li><a href="#Config">Config</a></li>
-            <ul>
-                <li><a href="#Configurations-du-SGBD-du-site">Configurations SGBD du site</a></li>
-                <li><a href="#php.ini-et-httpd.conf">php.ini et httpd.conf</a></li>
-                <li><a href="#Xdebug">Xdebug</a></li>
-            </ul>
-            <li><a href="#Stockages">Stockages</a></li>
-            <ul>
-                <li><a href="#Les-données-de-la-base-de-données">Les données de la base de données</a></li>
-                <li><a href="#Les-données-de-mailhog">Les données de mailhog</a></li>
-            </ul>
-            <li><a href="#Dossier-config-dans-www">Dossier config dans www</a></li>
+            <li><a href="#Projet">Projet</a></li>
+            <li><a href="#Données">Donnés</a></li>
         </ul>
     </li>
+    <li><a href="#Cron">Cron</a></li>
   </ol>
 </details>
 
@@ -52,9 +39,10 @@ Les versions :
 
 ## Version
 
-### Modifier les version
+### Modifier les versions
 
-Dans un fichier « docker-compose.yml » :
+Dans le fichier « docker-compose.yml » :
+
 ```
 args:
     - VALUE_PHP_VERSION=8.3.7RC1-fpm
@@ -74,4 +62,30 @@ args:
     - VALUE_PHP_VERSION=fpm
     - VALUE_XDEBUG_VERSION=
     - VALUE_COMPOSER_VERSION=latest
+```
+
+## Dossier
+
+### Projet
+
+Par défaut le projet sera placé dans le dossier « /usr/local/apache2/www » dans le conteneur du php.
+Vous pouvez le modifier dans un fichier  « docker-compose.yml » :
+
+```
+args:
+    - PHP_FOLDER_PROJECT=/var/www
+```
+
+### Données
+
+Mettre des données par défaut lors de la création du conteneur du php (images ou fichiers).
+Il suffit de placer les fichiers dans le dossier « /docker-entrypoint-initdata.d » du conteneur php.
+
+## Cron
+
+Pour mettre en place des tâches planifier, il suffit de modifier le fichier « /etc/cron.d/dockercron », enregister le contenu.
+Lancer dans le terminal du conteneur php :
+
+```
+$ crontab /etc/cron.d/dockercron
 ```
