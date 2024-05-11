@@ -27,9 +27,8 @@ ENV DEF_PHP_UNIT_VERSION=${DEF_PHPUNIT_VERSION:-"${VALUE_PHP_UNIT_VERSION}"}
 ENV PHP_UNIT_VERSION=${DEF_PHP_UNIT_VERSION:+"phpunit/phpunit:${DEF_PHP_UNIT_VERSION}"}
 ENV PHP_UNIT_VERSION=${PHP_UNIT_VERSION:-'phpunit/phpunit'}
 
-ARG VALUE_GOLANG_VERSION
-ENV DEF_GOLANG_VERSION=${VALUE_GOLANG_VERSION:-"1.11.8"}
-ARG GOLANG_VERSION="https://storage.googleapis.com/golang/go${DEF_GOLANG_VERSION}.linux-amd64.tar.gz"
+ARG VALUE_MHSEND_VERSION
+ENV DEF_MHSEND_VERSION=${VALUE_MHSEND_VERSION:-"v0.2.0"}
 
 ARG PHP_FOLDER_PROJECT
 ENV PHP_FOLDER_PROJECT=${PHP_FOLDER_PROJECT:-"/usr/local/apache2/www"}
@@ -41,19 +40,18 @@ ENV PHP_FOLDER_INIT_DATA="/docker-entrypoint-initdata.d/"
 
 # install package
 RUN set -ex
-RUN apt update
-RUN apt install -y unzip
-RUN apt install -y curl
-RUN apt install -y git
-RUN apt install -y cron
-RUN apt install -y inotify-tools
+RUN apt-get update
+RUN apt-get install -y curl
+RUN apt-get install -y git
+RUN apt-get install -y cron
+RUN apt-get install -y inotify-tools
+RUN apt-get install -y golang-go
+RUN apt-get install -y unzip
 #del list
 RUN rm -rf /var/lib/apt/lists/*
    
-#install mailhog
-RUN curl -Lsf ${GOLANG_VERSION} | tar -C '/usr/local' -xvzf -
-ENV PATH /usr/local/go/bin:$PATH
-RUN go get github.com/mailhog/mhsendmail
+#install mhsendmail
+RUN go install github.com/mailhog/mhsendmail@${DEF_MHSEND_VERSION}
 RUN cp /root/go/bin/mhsendmail /usr/bin/mhsendmail
     
 # Goto temporary directory.

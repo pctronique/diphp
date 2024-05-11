@@ -10,6 +10,6 @@ services:
             #    - VALUE_PHP_VERSION=8.3.7RC1-fpm
             #    - VALUE_XDEBUG_VERSION=3.3.2
             #    - VALUE_COMPOSER_VERSION=2.7.4
+            #    - VALUE_MHSEND_VERSION=v0.2.0
             #    - VALUE_PHP_UNIT_VERSION=11.1.3
-            #    - VALUE_GOLANG_VERSION=1.11.8
 
