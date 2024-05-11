@@ -26,7 +26,7 @@ Version 1.0.0
 
 ## Présentation
 
-Pour créer un image php avec xdebug à partir du php de docker.
+Pour créer une image php avec xdebug à partir du php de docker.
 
 Les versions :
 <ul>
@@ -94,7 +94,7 @@ volumes:
 
 ## Cron
 
-Pour mettre en place des tâches planifier, il suffit de créer un fichier « dockercron » (par exemple) dans votre projet.
+Pour mettre en place des tâches planifier, il suffit de créer un fichier « dockercron » dans votre projet.
 
 Dans un fichier docker-compose.yml :
 ```
@@ -102,13 +102,11 @@ volumes:
     - ./dockercron:/etc/cron.d/dockercron:rw
 ```
 
-Lancer dans le terminal du conteneur php :
-
+Entrer le cron dans le fichier « dockercron », exemple :
 ```
-$ crontab /etc/cron.d/dockercron
+*  *  *  *  * echo "Hello world!" >> /var/log/docker/php/test_cron.log
 ```
 
-Pour activer les nouvelles tâches.
 
 ## Docker hub
 
