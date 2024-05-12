@@ -5,13 +5,7 @@ Version 1.0.0
   <summary>Table des matières</summary>
   <ol>
     <li><a href="#Présentation">Présentation</a></li>
-    <li>
-        <a href="#Version">Version</a>
-        <ul>
-            <li><a href="#Modifier-les-versions">Modifier les versions</a></li>
-            <li><a href="#Dernière-version">Dernière version</a></li>
-        </ul>
-    </li>
+    <li><a href="#Cron">Cron</a></li>
     <li>
         <a href="#Dossier">Dossier</a>
         <ul>
@@ -19,7 +13,13 @@ Version 1.0.0
             <li><a href="#Données">Donnés</a></li>
         </ul>
     </li>
-    <li><a href="#Cron">Cron</a></li>
+    <li>
+        <a href="#Version">Version</a>
+        <ul>
+            <li><a href="#Modifier-les-versions">Modifier les versions</a></li>
+            <li><a href="#Dernière-version">Dernière version</a></li>
+        </ul>
+    </li>
     <li><a href="#Docker-hub">Docker hub</a></li>
   </ol>
 </details>
@@ -33,40 +33,30 @@ Les versions :
   <li>php:8.3.7RC1</li>
   <li>Xdebug:3.3.2</li>
   <li>composer:2.7.4</li>
+  <li>mhsendmail:v0.2.0</li>
   <li>phpunit:11.1.3</li>
 </ul>
 
 > [!NOTE]
 > Récupérer l'image du dossier « image ».
 
-## Version
+## Cron
 
-### Modifier les versions
+Pour mettre en place des tâches planifier, il suffit de créer un fichier « dockercron » dans votre projet.
 
-Dans le fichier « docker-compose.yml » :
-
+Dans un fichier docker-compose.yml :
 ```
-args:
-    - VALUE_PHP_VERSION=8.3.7RC1-fpm
-    - VALUE_XDEBUG_VERSION=3.3.2
-    - VALUE_COMPOSER_VERSION=2.7.4
-    - VALUE_PHP_UNIT_VERSION=11.1.3
+volumes:
+    - ./dockercron:/etc/cron.d/dockercron:rw
+```
+
+Entrer le cron dans le fichier « dockercron », exemple :
+```
+*  *  *  *  * echo "Hello world!" >> /var/log/docker/php/test_cron.log
 ```
 
 > [!NOTE]
-> Prendre une version fpm pour php.
-
-### Dernière version
-
-Pour installer la dernière version à partir du fichier :
-
-```
-args:
-    - VALUE_PHP_VERSION=fpm
-    - VALUE_XDEBUG_VERSION=
-    - VALUE_COMPOSER_VERSION=latest
-    - VALUE_PHP_UNIT_VERSION=
-```
+> Toutes modifications du fichier sera récupérée automatiquement par le conteneur.
 
 ## Dossier
 
@@ -92,21 +82,36 @@ volumes:
     - ./config/data:/docker-entrypoint-initdata.d:rw
 ```
 
-## Cron
+## Version
 
-Pour mettre en place des tâches planifier, il suffit de créer un fichier « dockercron » dans votre projet.
+### Modifier les versions
 
-Dans un fichier docker-compose.yml :
+Dans le fichier « docker-compose.yml » :
+
 ```
-volumes:
-    - ./dockercron:/etc/cron.d/dockercron:rw
+args:
+    - VALUE_PHP_VERSION=8.3.7RC1-fpm
+    - VALUE_XDEBUG_VERSION=3.3.2
+    - VALUE_COMPOSER_VERSION=2.7.4
+    - VALUE_MHSEND_VERSION=v0.2.0
+    - VALUE_PHP_UNIT_VERSION=11.1.3
 ```
 
-Entrer le cron dans le fichier « dockercron », exemple :
-```
-*  *  *  *  * echo "Hello world!" >> /var/log/docker/php/test_cron.log
-```
+> [!NOTE]
+> Prendre une version fpm pour php.
 
+### Dernière version
+
+Pour installer la dernière version à partir du fichier :
+
+```
+args:
+    - VALUE_PHP_VERSION=fpm
+    - VALUE_XDEBUG_VERSION=
+    - VALUE_COMPOSER_VERSION=latest
+    - VALUE_MHSEND_VERSION=latest
+    - VALUE_PHP_UNIT_VERSION=latest
+```
 
 ## Docker hub
 
@@ -142,9 +147,8 @@ ENV DEF_PHP_UNIT_VERSION=${DEF_PHPUNIT_VERSION:-"${VALUE_PHP_UNIT_VERSION}"}
 ENV PHP_UNIT_VERSION=${DEF_PHP_UNIT_VERSION:+"phpunit/phpunit:${DEF_PHP_UNIT_VERSION}"}
 ENV PHP_UNIT_VERSION=${PHP_UNIT_VERSION:-'phpunit/phpunit'}
 
-ARG VALUE_GOLANG_VERSION
-ENV DEF_GOLANG_VERSION=${VALUE_GOLANG_VERSION:-"1.11.8"}
-ARG GOLANG_VERSION="https://storage.googleapis.com/golang/go${DEF_GOLANG_VERSION}.linux-amd64.tar.gz"
+ARG VALUE_MHSEND_VERSION
+ENV DEF_MHSEND_VERSION=${VALUE_MHSEND_VERSION:-"v0.2.0"}
 ```
 
 Par :
@@ -157,5 +161,5 @@ FROM php:8.3.7RC1-fpm
 # variable version (environnement)
 ENV XDEBUG_VERSION="xdebug-3.3.2"
 ENV PHP_UNIT_VERSION="phpunit/phpunit:11.1.3"
-ARG GOLANG_VERSION="https://storage.googleapis.com/golang/go1.11.8.linux-amd64.tar.gz"
+ENV DEF_MHSEND_VERSION="v0.2.0"
 ```
